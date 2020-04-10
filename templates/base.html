@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Bootstrap code -->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <!-- My css -->
+    <style type="text/css">
+      a.edit, a.delete {
+        display: none;
+      }
+      .login_but {
+        color: #30A745;
+      }
+      .login_but:hover {
+        color: #FFFFFF;
+      }
+       /* style="color:#30A745;" */
+    </style>
+
+    <title>
+      {% block title %}
+        Blog
+      {% endblock %}
+    </title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="{% url 'posts_list_url' %}">Home</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'tags_list_url' %}">Tag<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://vk.com/y_o_u_a_r_e_h_a_c_k_e_d">creator</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModalCenter">contacts</a>
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Contacts</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Phone: +7-910-123-45-67<br>
+                    Inst: te$t_in_$t<br>
+                    Email: test@gmail.com
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Ok</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ user.get_username }}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item teg" href="/blog/profile/id{{ user.id }}">Profile</a>
+                <a class="dropdown-item post" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
+              </div>
+            </li>
+          {% endif %}
+          {% if request.user.is_authenticated and request.user.is_staff  %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Admin
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item post" href="{% url 'post_create_url' %}">Post</a>
+                <a class="dropdown-item teg" href="{% url 'tag_create_url' %}">Teg</a>
+                <!-- <div class="dropdown-divider"></div> -->
+                <a href="{{ admin_object.get_update_url }}" class="dropdown-item edit" style="{% if detail %}display:block;{% endif %}">Edit</a>
+                <a href="{{ admin_object.get_delete_url }}" class="dropdown-item delete" style="{% if detail %}display:block;{% endif %}">Delete</a>
+              </div>
+            </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/profiles/">users</a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0"  action="{% url 'posts_list_url' %}">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-6 offset-md-2">
+          {% if user.is_authenticated %}
+            <!-- <li>User: {{ user.get_username }}</li>
+            <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li> -->
+            {% block content %}
+              <p>Php - govno</p>
+            {% endblock %}
+          {% else %}
+            {% block login_register %}
+            <div class="alert alert-warning" role="alert">
+              WARNING! You are not logged in to your account, please log in to see the content of this site.
+            </div>
+            <button type="button" class="btn btn-outline-success"><a class="login_but" href="{% url 'login'%}?next={{request.path}}">Login</a></button>
+            {% endblock %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

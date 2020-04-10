@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Profile
+{% endblock %}
+
+{% block content %}
+  {% for message in messages %}
+    <div data-spy="scroll" data-target="#navbar-example3" data-offset="1">
+      <p>{{ message }}</p>
+    </div>
+  {% endfor %}
+  <form action="{% url 'chat_detail_url' message_token=id_chat %}" method="POST">
+    {% csrf_token %}
+    <textarea name="name" rows="1" cols="40" style="resize:none;"></textarea>
+    <button type="submit" class="btn btn-outline-info" style="margin-bottom:30px;">Отправить</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Profile
+{% endblock %}
+
+{% block content %}
+  {% for user_name in name_user %}
+    <h1>{{ user_name }}{% if my_acc %} - Это я =){% endif %}</h1>
+  {% endfor %}
+  <h2>My id - {{ user_id }}</h2><br>
+  {% if my_acc %}
+    <button type="button" class="btn btn-outline-dark"><a href="/blog/message/">Сообщения</a></button>
+    <button type="button" class="btn btn-outline-dark">Добавить в друзья</button>
+  {% else %}
+    <button type="button" class="btn btn-outline-dark"><a href="/blog/message/{{ message_token }}">Написать</a></button>
+    <button type="button" class="btn btn-outline-dark">Добавить в друзья</button>
+  {% endif %}
+{% endblock %}
